@@ -6,8 +6,9 @@ A small, focused Neovim configuration for Java development, built on
 General-purpose Neovim configs tend to accumulate every language and tool you
 have ever touched. This one carries only what Java work actually needs: jdtls
 via nvim-jdtls, a debugger and test runner, XML/YAML/TOML support for build
-files and config, and enough Markdown, Git and Jujutsu support to live in a real
-repository. Around 40 plugins in total, most of them LazyVim's own defaults.
+files and config, and enough Docker, Markdown, Git and Jujutsu support to live
+in a real repository. Around 40 plugins in total, most of them LazyVim's own
+defaults.
 
 It is deliberately unopinionated about everything else. There is no AI tooling,
 no note-taking, no second language server — if you want those, add them in
@@ -20,10 +21,13 @@ no note-taking, no second language server — if you want those, add them in
 - `git`, a C compiler and `curl` (for treesitter parsers and Mason downloads)
 - A [Nerd Font](https://www.nerdfonts.com/) for the icons
 - Optionally [`jj`](https://jj-vcs.github.io/jj/) for the Jujutsu integration
+- Optionally [`lazydocker`](https://github.com/jesseduffield/lazydocker) for the
+  `<leader>D` container UI
 
 Everything else — jdtls, lemminx, java-debug-adapter, java-test,
-yaml-language-server, taplo, marksman, markdownlint-cli2, markdown-toc — is
-installed by Mason on first launch.
+yaml-language-server, dockerls, docker-compose-language-service, hadolint,
+taplo, marksman, markdownlint-cli2, markdown-toc — is installed by Mason on
+first launch.
 
 Gradle and Maven are not wrapped by a plugin. jdtls imports the project itself,
 and tasks are best run from a terminal (`<leader>ft` opens one) or with `:!`.
@@ -81,6 +85,7 @@ lazygit, trouble, ...) plus these extras, listed in `lazyvim.json`:
 | --- | --- |
 | `lang.java` | nvim-jdtls (jdtls), java-debug-adapter, java-test, `java` parser |
 | `lang.yaml` | yaml-language-server + SchemaStore |
+| `lang.docker` | dockerls, docker-compose-language-service, hadolint, `dockerfile` parser |
 | `lang.toml` | taplo LSP + TOML treesitter |
 | `lang.markdown` | marksman LSP, render-markdown.nvim, markdown-preview, markdownlint-cli2 |
 | `lang.git` | gitcommit/git treesitter parsers |
@@ -93,6 +98,9 @@ Local overrides in `lua/plugins/`:
 - `java.lua` — jdtls settings: library source downloading, decompiled sources,
   static-import favourites for JUnit/Mockito/AssertJ, import order
 - `xml.lua` — lemminx LSP plus `xml` and `properties` treesitter parsers
+- `docker.lua` — lazydocker on `<leader>D` plus `yaml.docker-compose` filetype
+  detection
+- `toggleterm.lua` — ToggleTerm on `<C-t>`
 - `jj.lua` — [jj.nvim](https://github.com/NicolasGB/jj.nvim) under `<leader>j`
 - `markdown.lua` — blink.cmp completions, prettier dropped from the format chain
 - `blink-cmp.lua` — completion sources and signature help
@@ -198,6 +206,34 @@ return {
 
 Without a valid `ls_path` the plugin warns once and does nothing, so it fails
 softly if the jar moves.
+
+## Docker
+
+The `lang.docker` extra covers editing: `dockerls` for Dockerfiles,
+`docker-compose-language-service` for compose files, and `hadolint` linting.
+
+Neovim has no built-in rule for the compound `yaml.docker-compose` filetype the
+compose server requires, so `lua/plugins/docker.lua` adds one for
+`compose.y{a}ml` and `docker-compose.y{a}ml` (including
+`compose.override.yaml`-style variants). Both filetype components still match,
+so yamlls and SchemaStore keep working on the same buffer.
+
+For running and inspecting containers, `<leader>D` opens
+[lazydocker](https://github.com/jesseduffield/lazydocker) in a Snacks float, the
+same way LazyVim opens lazygit. It handles compose projects, logs, shells and
+restarts, so no Docker plugin is needed — just the binary:
+
+```sh
+brew install lazydocker
+```
+
+The keymap notifies and does nothing if lazydocker is not installed.
+
+## Terminal
+
+`<C-t>` toggles a [ToggleTerm](https://github.com/akinsho/toggleterm.nvim)
+terminal in normal and terminal mode; in visual mode it sends the selection to
+it. LazyVim's Snacks terminal (`<C-/>`, `<leader>ft`) still works alongside.
 
 ## Customising
 
