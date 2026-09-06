@@ -1,0 +1,3 @@
+# Written by lazy.nvim on every update; pinning it here would only produce
+# churn, since plugins are updated from inside Neovim rather than in this repo.
+lazy-lock.json
