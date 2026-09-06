@@ -7,7 +7,7 @@ General-purpose Neovim configs tend to accumulate every language and tool you
 have ever touched. This one carries only what Java work actually needs: jdtls
 via nvim-jdtls, a debugger and test runner, XML/YAML/TOML support for build
 files and config, and enough Docker, Markdown, Git and Jujutsu support to live
-in a real repository. Around 40 plugins in total, most of them LazyVim's own
+in a real repository. Around 45 plugins in total, most of them LazyVim's own
 defaults.
 
 It is deliberately unopinionated about everything else. There is no AI tooling,
@@ -16,7 +16,8 @@ no note-taking, no second language server — if you want those, add them in
 
 ## Requirements
 
-- Neovim >= 0.11.2 (LazyVim's minimum)
+- Neovim >= 0.11.2 (LazyVim's minimum); refactoring.nvim needs >= 0.12 and
+  disables itself below that
 - A JDK on `PATH` — 21 or newer, since that is what jdtls itself runs on
 - `git`, a C compiler and `curl` (for treesitter parsers and Mason downloads)
 - A [Nerd Font](https://www.nerdfonts.com/) for the icons
@@ -92,6 +93,7 @@ lazygit, trouble, ...) plus these extras, listed in `lazyvim.json`:
 | `dap.core` | nvim-dap, dap-ui, virtual text, mason-nvim-dap |
 | `editor.snacks_picker` | Snacks as the picker |
 | `editor.snacks_explorer` | Snacks as the file explorer |
+| `editor.refactoring` | refactoring.nvim — treesitter extract/inline under `<leader>r` |
 
 Local overrides in `lua/plugins/`:
 
@@ -109,7 +111,7 @@ Local overrides in `lua/plugins/`:
 
 The Java mappings all come from LazyVim's `lang.java` extra:
 
-### Refactoring — `<leader>c` (in `.java` buffers)
+### jdtls refactoring — `<leader>c` (in `.java` buffers)
 
 | Key | Action |
 | --- | --- |
@@ -117,6 +119,23 @@ The Java mappings all come from LazyVim's `lang.java` extra:
 | `<leader>cxv` / `<leader>cxc` | Extract variable / constant |
 | `<leader>cxm` | Extract method (visual mode) |
 | `<leader>cgs` / `<leader>cgS` | Goto super / subjects |
+
+### Treesitter refactoring — `<leader>r`
+
+From `editor.refactoring`. These are language-agnostic and work anywhere a
+treesitter parser is loaded, so they complement rather than replace the jdtls
+refactorings above — jdtls understands types and imports, refactoring.nvim only
+understands syntax.
+
+| Key | Action |
+| --- | --- |
+| `<leader>rs` | Select refactor (menu of all of the below) |
+| `<leader>rf` / `<leader>rF` | Extract function / to file |
+| `<leader>rx` / `<leader>ri` | Extract variable / inline variable |
+| `<leader>rp` / `<leader>rP` | Debug print variable / print location |
+| `<leader>rc` | Clean up debug prints |
+
+Most of them take a visual selection.
 
 ### Testing — `<leader>t`
 
