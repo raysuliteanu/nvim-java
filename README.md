@@ -260,3 +260,9 @@ it. LazyVim's Snacks terminal (`<C-/>`, `<leader>ft`) still works alongside.
 `lazyvim.json` lists the enabled LazyVim extras; add or remove entries there, or
 use `:LazyExtras`. Anything beyond that goes in `lua/plugins/` as a normal
 lazy.nvim spec — files are picked up automatically.
+
+`lazy-lock.json` is deliberately not committed. Plugins are updated from
+inside Neovim with `:Lazy update`, so the lock file churns independently of
+anything else here. The trade-off is that a fresh clone resolves plugins to
+whatever is current rather than to a known-good set; if an install ever breaks,
+that is the first thing to check.
