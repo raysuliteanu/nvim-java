@@ -5,7 +5,7 @@ A small, focused Neovim configuration for Java development, built on
 
 General-purpose Neovim configs tend to accumulate every language and tool you
 have ever touched. This one carries only what Java work actually needs: jdtls
-via nvim-jdtls, a debugger and test runner, XML/YAML/TOML support for build
+via nvim-jdtls, a debugger and test runner, XML/JSON/YAML/TOML support for build
 files and config, and enough Docker, Markdown, Git and Jujutsu support to live
 in a real repository. Around 45 plugins in total, most of them LazyVim's own
 defaults.
@@ -25,7 +25,7 @@ no note-taking, no second language server — if you want those, add them in
 - Optionally [`lazydocker`](https://github.com/jesseduffield/lazydocker) for the
   `<leader>D` container UI
 
-Everything else — jdtls, lemminx, java-debug-adapter, java-test,
+Everything else — jdtls, lemminx, java-debug-adapter, java-test, json-lsp,
 yaml-language-server, dockerls, docker-compose-language-service, hadolint,
 taplo, marksman, markdownlint-cli2, markdown-toc — is installed by Mason on
 first launch.
@@ -86,6 +86,7 @@ lazygit, trouble, ...) plus these extras, listed in `lazyvim.json`:
 | --- | --- |
 | `lang.java` | nvim-jdtls (jdtls), java-debug-adapter, java-test, `java` parser |
 | `lang.yaml` | yaml-language-server + SchemaStore |
+| `lang.json` | jsonls (json/jsonc) + SchemaStore, `json5` parser |
 | `lang.docker` | dockerls, docker-compose-language-service, hadolint, `dockerfile` parser |
 | `lang.toml` | taplo LSP + TOML treesitter |
 | `lang.markdown` | marksman LSP, render-markdown.nvim, markdown-preview, markdownlint-cli2 |
